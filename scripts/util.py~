@@ -1,8 +1,0 @@
-import numpy as np
-
-
-def load_embs(filename):
-    embs = {}
-    for line in open(filename):
-        toks = line.split()
-        embs[toks[0]] = np.array(toks[1:])

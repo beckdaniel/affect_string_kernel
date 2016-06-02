@@ -1,3 +1,0 @@
-from sklearn.linear import Ridge
-import sys
-
