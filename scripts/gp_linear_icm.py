@@ -23,14 +23,14 @@ X = []
 
 with open(INPUTS) as f:
     for line in f:
-        X.append([util.preprocess_sent(line.split('_')[1])])
+        X.append(util.preprocess_sent(line.split('_')[1]))
 
 Y = np.loadtxt(LABELS)[:, 1:]
 
 ###################
 # PREPROCESS X
-#X  = np.array([util.average_sent(sent, embs) for sent in X])
-X = np.array(X, dtype=object)
+X = np.array([util.average_sent(sent, embs) for sent in X])
+#X = np.array(X, dtype=object)
 X_train = X[:SPLIT]
 Y_train = Y[:SPLIT]
 X_test = X[-TEST_SPLIT:]
@@ -55,7 +55,7 @@ for emo_id, emo in enumerate(EMOS):
 
 
 ####################
-sk = flakes.wrappers.gpy.GPyStringKernel(order_coefs=[1.0] * 4, embs=embs, mode='tf-batch')
+sk = GPy.kern.Linear(X_train.shape[1], ARD=False)
 k = GPy.util.multioutput.ICM(input_dim=X_train.shape[1], num_outputs=6, 
                              kernel=sk, W_rank=1)
 
@@ -67,13 +67,14 @@ print m
 #m.optimize_restarts(num_restarts=5, robust=True, messages=True, max_iters=30)
 m.optimize(messages=True, max_iters=100)
 print m
-print m['.*coefs.*']
+print m['.*variances.*']
 print m['.*kappa.*']
 print m['.*W.*']
 
 X_test, Y_test, index = GPy.util.multioutput.build_XY(X_test_list, Y_test_list)
-noise_dict = {'output_index': X_test[:,1:].astype(int)}
+noise_dict = {'output_index': X_test[:,-1:].astype(int)}
 
+print X_test.shape
 preds = m.predict(X_test, Y_metadata=noise_dict)[0].flatten()
 Y_test = np.array(Y_test).flatten()
 print len(preds)
