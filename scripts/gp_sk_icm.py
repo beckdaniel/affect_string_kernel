@@ -55,17 +55,18 @@ for emo_id, emo in enumerate(EMOS):
 
 
 ####################
-sk = flakes.wrappers.gpy.GPyStringKernel(order_coefs=[1.0] * 4, embs=embs, mode='tf-batch')
-k = GPy.util.multioutput.ICM(input_dim=X_train.shape[1], num_outputs=6, 
-                             kernel=sk, W_rank=1)
+sk = flakes.wrappers.gpy.GPyStringKernel(order_coefs=[1.0] * 4, embs=embs, mode='tf-batch', device='/gpu:0')
+#k = GPy.util.multioutput.ICM(input_dim=X_train.shape[1], num_outputs=6, 
+#                             kernel=sk, W_rank=1)
 
 m = GPy.models.GPCoregionalizedRegression(X_list=X_train_list, 
                                           Y_list=Y_train_list,
-                                          kernel=k)
+                                          kernel=sk,
+                                          kron_prod=True)
 
 print m
 #m.optimize_restarts(num_restarts=5, robust=True, messages=True, max_iters=30)
-m.optimize(messages=True, max_iters=100)
+m.optimize(messages=True, max_iters=30)
 print m
 print m['.*coefs.*']
 print m['.*kappa.*']

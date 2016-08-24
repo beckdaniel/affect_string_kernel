@@ -56,12 +56,12 @@ for emo_id, emo in enumerate(EMOS):
 
 ####################
 sk = GPy.kern.Linear(X_train.shape[1], ARD=False)
-k = GPy.util.multioutput.ICM(input_dim=X_train.shape[1], num_outputs=6, 
-                             kernel=sk, W_rank=1)
+#k = GPy.util.multioutput.ICM(input_dim=X_train.shape[1], num_outputs=6, 
+#                             kernel=sk, W_rank=1, kron_prod=True)
 
 m = GPy.models.GPCoregionalizedRegression(X_list=X_train_list, 
                                           Y_list=Y_train_list,
-                                          kernel=k)
+                                          kernel=sk, kron_prod=True)
 
 print m
 #m.optimize_restarts(num_restarts=5, robust=True, messages=True, max_iters=30)
