@@ -11,6 +11,26 @@ def load_embs(filename):
     return embs
 
 
+def load_embs_matrix(filename):
+    data = np.loadtxt(filename, delimiter=' ', comments=None, dtype=object)
+    words = data[:, 0]
+    embs = np.array(data[:, 1:], dtype=float)
+    print embs.shape
+    embs = np.concatenate(([[0.0] * embs.shape[1]], embs))
+    words = dict([(word, i+1) for i, word in enumerate(words)])
+    return embs, words
+
+
+def get_indices(sent, words):
+    indices = []
+    for word in sent:
+        try:
+            indices.append(words[word])
+        except KeyError: #unk
+            indices.append(0)
+    return indices
+
+
 def preprocess_sent(sent):
     """
     Take a sentence in string format and returns

@@ -55,7 +55,7 @@ for emo_id, emo in enumerate(EMOS):
 
 
 ####################
-sk = flakes.wrappers.gpy.GPyStringKernel(order_coefs=[1.0] * 4, embs=embs, mode='tf-batch', device='/gpu:0')
+sk = flakes.wrappers.gpy.GPyStringKernel(order_coefs=[1.0] * 4, embs=embs, mode='tf-batch', device='/cpu:0')
 #k = GPy.util.multioutput.ICM(input_dim=X_train.shape[1], num_outputs=6, 
 #                             kernel=sk, W_rank=1)
 
