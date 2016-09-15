@@ -13,7 +13,7 @@ import flakes
 INPUTS = sys.argv[1]
 LABELS = sys.argv[2]
 EMBS = sys.argv[3]
-SPLIT = 100
+SPLIT = int(sys.argv[4])
 TEST_SPLIT = 100
 
 ###################
@@ -45,7 +45,7 @@ print X_train.ndim
 
 ####################
 # RIDGE
-sk = flakes.wrappers.gpy.GPyStringKernel(gap_decay=0.1, match_decay=0.1, order_coefs=[1.0] * 5, embs=embs, device='/cpu:0', mode='tf-batch-lazy', batch_size=100, index=words, sim='arccos0', wrapper='arccos0')
+sk = flakes.wrappers.gpy.GPyStringKernel(gap_decay=0.1, match_decay=0.1, order_coefs=[1.0] * 5, embs=embs, device='/cpu:0', mode='tf-batch-lazy', batch_size=1000, index=words, sim='arccos0', wrapper='arccos0')
 k = sk #* GPy.kern.Bias(1)
 
 m = GPy.models.GPRegression(X_train, Y_train, kernel=k)
