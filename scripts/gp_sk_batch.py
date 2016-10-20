@@ -46,9 +46,9 @@ print X_train.ndim
 ####################
 # RIDGE
 sk = flakes.wrappers.gpy.GPyStringKernel(gap_decay=0.1, match_decay=0.1, order_coefs=[1.0] * 5, 
-                                         embs=embs, device='/cpu:0', mode='tf-batch-lazy', 
-                                         batch_size=1000, index=words, sim='arccos0', 
-                                         wrapper='arccos0_prod')
+                                         embs=embs, device='/cpu:0', mode='tf-batch', 
+                                         batch_size=1000, index=words, sim='dot', 
+                                         wrapper='none')
 k = sk #* GPy.kern.Bias(1)
 
 m = GPy.models.GPRegression(X_train, Y_train, kernel=k)
