@@ -1,6 +1,6 @@
 import numpy as np
 from nltk.tokenize import _treebank_word_tokenize
-
+from collections import defaultdict
 
 def load_embs(filename):
     embs = {}
@@ -17,7 +17,7 @@ def load_embs_matrix(filename):
     embs = np.array(data[:, 1:], dtype=float)
     print embs.shape
     embs = np.concatenate(([[0.0] * embs.shape[1]], embs))
-    words = dict([(word, i+1) for i, word in enumerate(words)])
+    words = defaultdict(int, [(word, i+1) for i, word in enumerate(words)])
     return embs, words
 
 
