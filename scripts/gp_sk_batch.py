@@ -45,14 +45,17 @@ print X_train.ndim
 
 ####################
 # RIDGE
-sk = flakes.wrappers.gpy.GPyStringKernel(gap_decay=0.1, match_decay=0.1, order_coefs=[1.0] * 5, embs=embs, device='/cpu:0', mode='tf-batch-lazy', batch_size=1000, index=words, sim='arccos0', wrapper='arccos0')
+sk = flakes.wrappers.gpy.GPyStringKernel(gap_decay=0.1, match_decay=0.1, order_coefs=[1.0] * 5, 
+                                         embs=embs, device='/cpu:0', mode='tf-batch-lazy', 
+                                         batch_size=1000, index=words, sim='arccos0', 
+                                         wrapper='arccos0_prod')
 k = sk #* GPy.kern.Bias(1)
 
 m = GPy.models.GPRegression(X_train, Y_train, kernel=k)
 print m
 #m['.*variance.*'].constrain_fixed(0.5)
-m['.*decay.*'].constrain_bounded(0.0, 1.0)
-m['.*coefs.*'].constrain_bounded(0.0, 1.0)
+#m['.*decay.*'].constrain_bounded(0.0, 1.0)
+#m['.*coefs.*'].constrain_bounded(0.0, 1.0)
 m['.*string.variance.*'].constrain_bounded(1e-4, 10)
 m.optimize(messages=True, max_iters=50)
 print m
