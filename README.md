@@ -1,2 +1,4 @@
-# affect_string_kernel
-Emotion Analysis using String Kernels and Gaussian Processes
+# emo_analysis
+Emotion Analysis using Gaussian Processes
+
+TODO: add pointers/scripts to dataset and embeddings
