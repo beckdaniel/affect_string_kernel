@@ -105,6 +105,7 @@ for i_train, i_test in folds:
             k = GPy.kern.MLP(X.shape[1])
         if args.label_preproc == "warp":
             model = GPy.models.WarpedGP(X_train, Y_train, kernel=k)
+            model['warp_tanh.psi'] = np.random.lognormal(0, 1, (3, 3))
         else:
             model = GPy.models.GPRegression(X_train, Y_train, kernel=k)
         model.optimize(messages=True, max_iters=50)
@@ -170,6 +171,11 @@ for i_train, i_test in folds:
         info_dict['bias_variance'] = float(model['mlp.bias_variance'])
         info_dict['noise'] = float(model['Gaussian_noise.variance'])
         info_dict['log_likelihood'] = float(model.log_likelihood())
+
+    if args.label_preproc == 'warp':
+        info_dict['warp_psi'] = list([list(pars) for pars in model['warp_tanh.psi']])
+        info_dict['warp_d'] = float(model['warp_tanh.d'])
+        
     
     # Save information
     fold_dir = os.path.join(main_out_dir, str(fold))
