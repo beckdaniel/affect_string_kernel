@@ -103,7 +103,10 @@ for i_train, i_test in folds:
             k = GPy.kern.Linear(X.shape[1])
         elif args.model == 'mlp':
             k = GPy.kern.MLP(X.shape[1])
-        model = GPy.models.GPRegression(X_train, Y_train, kernel=k)
+        if args.label_preproc == "warp":
+            model = GPy.models.WarpedGP(X_train, Y_train, kernel=k)
+        else:
+            model = GPy.models.GPRegression(X_train, Y_train, kernel=k)
         model.optimize(messages=True, max_iters=50)
     
     # Get predictions
