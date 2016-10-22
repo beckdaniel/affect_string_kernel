@@ -48,8 +48,8 @@ print X_train.ndim
 ####################
 # RIDGE
 sk = flakes.wrappers.gpy.GPyStringKernel(gap_decay=0.1, match_decay=0.1, order_coefs=[1.0] * 5, 
-                                         embs=embs, device='/cpu:0', mode='numpy', 
-                                         batch_size=1000, sim='dot', 
+                                         embs=embs, device='/cpu:0', mode='tf-batch', 
+                                         batch_size=10, sim='dot', 
                                          wrapper='none')
 k = sk #* GPy.kern.Bias(1)
 
