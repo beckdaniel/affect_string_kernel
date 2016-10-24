@@ -50,3 +50,14 @@ def average_sent(sent, embs):
     return np.mean(result, axis=0)
     
     
+def pad_sents(X):
+    """
+    Pad all sents with zeroes so each
+    sent has length = max length.
+    This is to ensure we have a numpy array.
+    """
+    maxlen = max([len(x[0]) for x in X])
+    new_X = []
+    for x in X:
+        new_X.append([x[0] + ([0] * (maxlen - len(x[0])))])
+    return new_X

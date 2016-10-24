@@ -51,7 +51,7 @@ Y = np.loadtxt(args.labels)[:, 1:]
 ###############
 # Preprocessing
 X = np.array([util.average_sent(sent, embs) for sent in X])
-data = np.concatenate((X, Y), axis = 1)[:args.data_size]
+data = np.concatenate((X, Y), axis=1)[:args.data_size]
 np.random.seed(1000)
 np.random.shuffle(data)
 X = data[:, :-1]
