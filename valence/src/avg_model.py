@@ -35,6 +35,7 @@ parser.add_argument('label_preproc', help='one of "none", "scale", "warp"')
 parser.add_argument('output_dir', help='directory where outputs will be stored')
 parser.add_argument('--data_size', help='size of dataset, default is full size',
                     default=10000, type=int)
+parser.add_argument('--ard', help='set this flag to enable ARD', action='store_true')
 args = parser.parse_args()
 
 ###########
@@ -63,7 +64,11 @@ folds = kf.split(data)
 
 ##############
 # Create output structure
-main_out_dir = os.path.join(args.output_dir, 'avg', args.model, args.label_preproc)
+if args.ard:
+    mode = 'ard'
+else:
+    mode = 'iso'
+main_out_dir = os.path.join(args.output_dir, 'avg', args.model + '_' + mode, args.label_preproc)
 
 #############
 # Train models and report
@@ -92,23 +97,23 @@ for i_train, i_test in folds:
         model.fit(X_train, Y_train.flatten())
     else:
         if args.model == 'rbf':
-            k = GPy.kern.RBF(X.shape[1])
+            k = GPy.kern.RBF(X.shape[1], ARD=args.ard)
         elif args.model == 'mat32':
-            k = GPy.kern.Matern32(X.shape[1])
+            k = GPy.kern.Matern32(X.shape[1], ARD=args.ard)
         elif args.model == 'mat52':
-            k = GPy.kern.Matern52(X.shape[1])
+            k = GPy.kern.Matern52(X.shape[1], ARD=args.ard)
         elif args.model == 'ratquad':
-            k = GPy.kern.RatQuad(X.shape[1])
+            k = GPy.kern.RatQuad(X.shape[1], ARD=args.ard)
         elif args.model == 'linear':
-            k = GPy.kern.Linear(X.shape[1])
+            k = GPy.kern.Linear(X.shape[1], ARD=args.ard)
         elif args.model == 'mlp':
-            k = GPy.kern.MLP(X.shape[1])
+            k = GPy.kern.MLP(X.shape[1], ARD=args.ard)
         if args.label_preproc == "warp":
             model = GPy.models.WarpedGP(X_train, Y_train, kernel=k)
             model['warp_tanh.psi'] = np.random.lognormal(0, 1, (3, 3))
         else:
             model = GPy.models.GPRegression(X_train, Y_train, kernel=k)
-        model.optimize(messages=True, max_iters=50)
+        model.optimize(messages=True, max_iters=100)
     
     # Get predictions
     info_dict = {}
@@ -162,12 +167,12 @@ for i_train, i_test in folds:
         info_dict['noise'] = float(model['Gaussian_noise.variance'])
         info_dict['log_likelihood'] = float(model.log_likelihood())
     elif args.model == 'linear':
-        info_dict['variance'] = float(model['linear.variances'])
+        info_dict['variance'] = list(model['linear.variances'])
         info_dict['noise'] = float(model['Gaussian_noise.variance'])
         info_dict['log_likelihood'] = float(model.log_likelihood())
     elif args.model == 'mlp':
         info_dict['variance'] = float(model['mlp.variance'])
-        info_dict['weight_variance'] = float(model['mlp.weight_variance'])
+        info_dict['weight_variance'] = list(model['mlp.weight_variance'])
         info_dict['bias_variance'] = float(model['mlp.bias_variance'])
         info_dict['noise'] = float(model['Gaussian_noise.variance'])
         info_dict['log_likelihood'] = float(model.log_likelihood())
