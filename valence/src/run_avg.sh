@@ -15,3 +15,21 @@ OMP_NUM_THREADS=1 python avg_model.py ../../data/instances.txt ../../data/affect
 OMP_NUM_THREADS=1 python avg_model.py ../../data/instances.txt ../../data/affectivetext_test.valence.gold ../../embs/glove.6B.100d.txt ratquad scale ../results &
 OMP_NUM_THREADS=1 python avg_model.py ../../data/instances.txt ../../data/affectivetext_test.valence.gold ../../embs/glove.6B.100d.txt linear scale ../results &
 OMP_NUM_THREADS=1 python avg_model.py ../../data/instances.txt ../../data/affectivetext_test.valence.gold ../../embs/glove.6B.100d.txt mlp scale ../results &
+
+OMP_NUM_THREADS=1 python avg_model.py ../../data/instances.txt ../../data/affectivetext_test.valence.gold ../../embs/glove.6B.100d.txt ridge none ../results --ard &
+OMP_NUM_THREADS=1 python avg_model.py ../../data/instances.txt ../../data/affectivetext_test.valence.gold ../../embs/glove.6B.100d.txt svr none ../results --ard &
+OMP_NUM_THREADS=1 python avg_model.py ../../data/instances.txt ../../data/affectivetext_test.valence.gold ../../embs/glove.6B.100d.txt rbf none ../results --ard &
+OMP_NUM_THREADS=1 python avg_model.py ../../data/instances.txt ../../data/affectivetext_test.valence.gold ../../embs/glove.6B.100d.txt mat32 none ../results --ard &
+OMP_NUM_THREADS=1 python avg_model.py ../../data/instances.txt ../../data/affectivetext_test.valence.gold ../../embs/glove.6B.100d.txt mat52 none ../results --ard &
+OMP_NUM_THREADS=1 python avg_model.py ../../data/instances.txt ../../data/affectivetext_test.valence.gold ../../embs/glove.6B.100d.txt ratquad none ../results --ard &
+OMP_NUM_THREADS=1 python avg_model.py ../../data/instances.txt ../../data/affectivetext_test.valence.gold ../../embs/glove.6B.100d.txt linear none ../results --ard &
+OMP_NUM_THREADS=1 python avg_model.py ../../data/instances.txt ../../data/affectivetext_test.valence.gold ../../embs/glove.6B.100d.txt mlp none ../results --ard &
+
+OMP_NUM_THREADS=1 python avg_model.py ../../data/instances.txt ../../data/affectivetext_test.valence.gold ../../embs/glove.6B.100d.txt ridge scale ../results --ard &
+OMP_NUM_THREADS=1 python avg_model.py ../../data/instances.txt ../../data/affectivetext_test.valence.gold ../../embs/glove.6B.100d.txt svr scale ../results --ard &
+OMP_NUM_THREADS=1 python avg_model.py ../../data/instances.txt ../../data/affectivetext_test.valence.gold ../../embs/glove.6B.100d.txt rbf scale ../results --ard &
+OMP_NUM_THREADS=1 python avg_model.py ../../data/instances.txt ../../data/affectivetext_test.valence.gold ../../embs/glove.6B.100d.txt mat32 scale ../results --ard &
+OMP_NUM_THREADS=1 python avg_model.py ../../data/instances.txt ../../data/affectivetext_test.valence.gold ../../embs/glove.6B.100d.txt mat52 scale ../results --ard &
+OMP_NUM_THREADS=1 python avg_model.py ../../data/instances.txt ../../data/affectivetext_test.valence.gold ../../embs/glove.6B.100d.txt ratquad scale ../results --ard &
+OMP_NUM_THREADS=1 python avg_model.py ../../data/instances.txt ../../data/affectivetext_test.valence.gold ../../embs/glove.6B.100d.txt linear scale ../results --ard &
+OMP_NUM_THREADS=1 python avg_model.py ../../data/instances.txt ../../data/affectivetext_test.valence.gold ../../embs/glove.6B.100d.txt mlp scale ../results --ard &
