@@ -79,9 +79,9 @@ main_out_dir = os.path.join(args.output_dir, 'sk', args.label_preproc)
 fold = 0
 for i_train, i_test in folds:
     X_train = X[i_train]
-    Y_train = Y[i_train]
+    Y_train = np.array(Y[i_train], dtype=float)
     X_test = X[i_test]
-    Y_test = Y[i_test]
+    Y_test = np.array(Y[i_test], dtype=float)
 
     # Scale Y if asked for
     if args.label_preproc == "scale":
