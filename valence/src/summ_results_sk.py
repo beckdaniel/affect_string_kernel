@@ -9,10 +9,10 @@ RESULTS_DIR = sys.argv[1]
 #MODELS = ['mat32', 'mat52', 'ratquad', 'linear', 'mlp']
 #MODELS = ['ratquad', 'linear', 'mlp']
 #ARDS = ['iso']#, 'ard']
-#SCALES = ['none', 'scale', 'warp']
-SCALES = ['none']
+SCALES = ['none', 'scale', 'warp']
+#SCALES = ['none']
 #SCALES = ['scale']
-SCALES = ['none', 'scale']
+#SCALES = ['none', 'scale']
 FOLDS = [str(i) for i in range(10)]
 
 for scale in SCALES:

@@ -92,7 +92,7 @@ for i_train, i_test in folds:
     # Train model
     k = flakes.wrappers.gpy.GPyStringKernel(gap_decay=0.1, match_decay=0.1, order_coefs=[1.0] * 5, 
                                             embs=embs, device='/cpu:0', mode='tf-batch', 
-                                            batch_size=10, sim='dot', 
+                                            batch_size=1000, sim='dot', 
                                             wrapper='none')
     if args.label_preproc == "warp":
         model = GPy.models.WarpedGP(X_train, Y_train, kernel=k)
