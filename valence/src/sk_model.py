@@ -29,8 +29,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('inputs', help='the file with the sentence inputs')
 parser.add_argument('labels', help='the file with the valence labels')
 parser.add_argument('embs', help= 'the word embeddings file')
-#parser.add_argument('model', help='one of: "ridge", "svr", "linear",' +
-#                    '"rbf", "mat32", "mat52", "ratquad", "mlp"')
+parser.add_argument('model', help='one of: "linear",' +
+                    '"rbf", "mat32", "mat52", "ratquad", "mlp"')
 parser.add_argument('label_preproc', help='one of "none", "scale", "warp"')
 parser.add_argument('output_dir', help='directory where outputs will be stored')
 parser.add_argument('--data_size', help='size of dataset, default is full size',
@@ -72,7 +72,7 @@ folds = kf.split(data)
 
 ##############
 # Create output structure
-main_out_dir = os.path.join(args.output_dir, 'sk', args.label_preproc)
+main_out_dir = os.path.join(args.output_dir, 'sk', args.model, args.label_preproc)
 
 #############
 # Train models and report
@@ -90,17 +90,33 @@ for i_train, i_test in folds:
         Y_train = Y_scaler.transform(Y_train)
 
     # Train model
-    k = flakes.wrappers.gpy.GPyStringKernel(gap_decay=0.1, match_decay=0.1, order_coefs=[1.0] * 5, 
-                                            embs=embs, device='/cpu:0', mode='tf-batch', 
-                                            batch_size=1000, sim='dot', 
-                                            wrapper='none')
+    if args.model == 'linear':
+        k = flakes.wrappers.gpy.GPyStringKernel(gap_decay=0.1, match_decay=0.1, order_coefs=[1.0] * 5, 
+                                                embs=embs, device='/cpu:0', mode='tf-batch', 
+                                                batch_size=1000, sim='dot', 
+                                                wrapper='none')
+    elif args.model == 'rbf':
+        k = flakes.wrappers.gpy.RBFStringKernel(gap_decay=0.1, match_decay=1e-1, order_coefs=[0.1] * 5,
+                                                embs=embs, device='/cpu:0', mode='tf-batch', 
+                                                batch_size=1000, sim='dot', 
+                                                wrapper='none')
+        #k['gap_decay'].constrain_bounded(0.0, 0.5)
+        #k['match_decay'].constrain_bounded(0.0, 0.5)
+        #k['coefs'].constrain_fixed(0.00001)
+        
     if args.label_preproc == "warp":
         model = GPy.models.WarpedGP(X_train, Y_train, kernel=k)
         model['warp_tanh.psi'] = np.random.lognormal(0, 1, (3, 3))
     else:
-        model = GPy.models.GPRegression(X_train, Y_train, kernel=k)
+        #ll = GPy.likelihoods.Gaussian(variance=10.0)
+        model = GPy.models.GPRegression(X_train, Y_train, kernel=k, noise_var=2.0)
+        #model = GPy.core.GP(X_train, Y_train, kernel=k, likelihood=ll)
+    #print model.checkgrad(verbose=True)
+    #model.randomize()
+    #model['Gaussian_noise.variance'] = 10
     model.optimize(messages=True, max_iters=100)
-
+    print model
+    print model['.*coefs.*']
     # Get predictions
     info_dict = {}
     preds, vars = model.predict_noiseless(X_test)
@@ -114,11 +130,13 @@ for i_train, i_test in folds:
 
     # Get parameters
     print model
-    info_dict['gap_decay'] = float(model['string.gap_decay'])
-    info_dict['match_decay'] = float(model['string.match_decay'])
-    info_dict['coefs'] = list(model['string.coefs'])
+    info_dict['gap_decay'] = float(model['.*string.gap_decay'])
+    info_dict['match_decay'] = float(model['.*string.match_decay'])
+    info_dict['coefs'] = list(model['.*string.coefs'])
     info_dict['noise'] = float(model['Gaussian_noise.variance'])
     info_dict['log_likelihood'] = float(model.log_likelihood())
+    if args.model != 'linear':
+        info_dict['variance'] = float(model['rbf_string.variance'])
     if args.label_preproc == 'warp':
         info_dict['warp_psi'] = list([list(pars) for pars in model['warp_tanh.psi']])
         info_dict['warp_d'] = float(model['warp_tanh.d'])
