@@ -206,32 +206,32 @@ for i_train, i_test in folds:
         elif args.model == 'mat32':
             info_dict['variance'] = float(model['ICM.Mat32.variance'])
             info_dict['lengthscale'] = list(model['ICM.Mat32.lengthscale'])
-            info_dict['noise'] = float(model['mixed_noise.*'])
+            info_dict['noise'] = list([float(noise) for noise in model['mixed_noise.*']])
             info_dict['log_likelihood'] = float(model.log_likelihood())
         elif args.model == 'mat52':
             info_dict['variance'] = float(model['ICM.Mat52.variance'])
             info_dict['lengthscale'] = list(model['ICM.Mat52.lengthscale'])
-            info_dict['noise'] = float(model['mixed_noise.*'])
+            info_dict['noise'] = list([float(noise) for noise in model['mixed_noise.*']])
             info_dict['log_likelihood'] = float(model.log_likelihood())
         elif args.model == 'ratquad':
             info_dict['variance'] = float(model['ICM.RatQuad.variance'])
             info_dict['lengthscale'] = list(model['ICM.RatQuad.lengthscale'])
             info_dict['power'] = list(model['ICM.RatQuad.power'])
-            info_dict['noise'] = float(model['mixed_noise.*'])
+            info_dict['noise'] = list([float(noise) for noise in model['mixed_noise.*']])
             info_dict['log_likelihood'] = float(model.log_likelihood())
         elif args.model == 'linear':
             info_dict['variance'] = list(model['ICM.linear.variances'])
-            info_dict['noise'] = float(model['mixed_noise.*'])
+            info_dict['noise'] = list([float(noise) for noise in model['mixed_noise.*']])
             info_dict['log_likelihood'] = float(model.log_likelihood())
         elif args.model == 'mlp':
             info_dict['variance'] = float(model['ICM.mlp.variance'])
             info_dict['weight_variance'] = list(model['ICM.mlp.weight_variance'])
             info_dict['bias_variance'] = float(model['ICM.mlp.bias_variance'])
-            info_dict['noise'] = float(model['mixed_noise.*'])
+            info_dict['noise'] = list([float(noise) for noise in model['mixed_noise.*']])
             info_dict['log_likelihood'] = float(model.log_likelihood())
 
         if args.model != 'ridge' and args.model != 'svr':
-            info_dict['W'] = list([float(w) for w in model['ICM.B.W']])
+            info_dict['W'] = list([list(w) for w in model['ICM.B.W']])
             info_dict['kappa'] = list([float(kappa) for kappa in model['ICM.B.kappa']])
 
         if args.label_preproc == 'warp':
