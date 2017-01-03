@@ -8,6 +8,7 @@ import sys
 import os
 import argparse
 import json
+import gc
 
 from sklearn.linear_model import RidgeCV
 from sklearn.svm import SVR
@@ -272,5 +273,7 @@ for i_train, i_test in folds:
         if args.model != 'ridge' and args.model != 'svr':
             np.savetxt(os.path.join(fold_dir, 'vars.tsv'), np.transpose(vars_list))
 
+        gc.collect(2)
+            
     # Finished emotions, next fold
     fold += 1
