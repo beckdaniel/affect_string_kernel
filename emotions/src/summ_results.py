@@ -4,25 +4,27 @@ import os
 import sys
 
 RESULTS_DIR = sys.argv[1]
-#MODELS = ['ridge', 'svr', 'rbf', 'mat32', 'mat52', 'ratquad', 'linear', 'mlp']
+MODELS = ['ridge', 'svr', 'rbf', 'mat32', 'mat52', 'ratquad', 'linear', 'mlp']
+#MODELS = ['ridge', 'rbf', 'mat32', 'mat52', 'ratquad', 'linear', 'mlp']
 #MODELS = ['rbf', 'mat32', 'mat52', 'ratquad', 'linear', 'mlp']
 #MODELS = ['mat32', 'mat52', 'ratquad', 'linear', 'mlp']
 #MODELS = ['ratquad', 'linear', 'mlp']
 #MODELS = ['ridge']
 #MODELS = ['rbf']
-MODELS = ['mat52']
+#MODELS = ['mat52']
 #MODELS = ['ridge', 'svr', 'rbf', 'mat32', 'mat52']
 RANKS = ['rank_1']
 #ARDS = ['iso', 'ard']
 #ARDS = ['ard']
 ARDS = ['iso']
 #SCALES = ['none', 'scale', 'warp']
-SCALES = ['none', 'warp']
+#SCALES = ['none', 'warp']
 BIAS = ['', '_bias']
 #BIAS = ['']
+#BIAS = ['_bias']
 #NORMS = ['', '_norm']
 NORMS = ['']
-#SCALES = ['none']
+SCALES = ['none']
 #SCALES = ['scale']
 #SCALES = ['warp']
 FOLDS = [str(i) for i in range(10)]
@@ -34,11 +36,14 @@ EMOS = ['anger', 'disgust', 'fear', 'joy', 'sadness', 'surprise']
 
 for model in MODELS:
     for scale in SCALES:
-        if model == 'svr' or model == 'ridge':
-            if scale == 'warp':
-                continue
         for ard in ARDS:
             for bias in BIAS:
+                if model == 'svr' or model == 'ridge':
+                    if scale == 'warp':
+                        continue
+                    if bias == '_bias':
+                        continue
+
                 for norm in NORMS:
                     emo_maes = []
                     emo_rmses = []
@@ -56,8 +61,7 @@ for model in MODELS:
                                 rmses.append(info['rmse'])
                                 pearsons.append(info['pearsonr'][0])
                                 if 'nlpd' in info:
-                                    # NLPD was stored as positive by mistake
-                                    nlpds.append(-info['nlpd'])
+                                    nlpds.append(info['nlpd'])
                             #print model, ard, scale, emo
                             #print np.mean(maes), np.mean(rmses), np.mean(pearsons),
                             emo_maes.append(np.mean(maes))
