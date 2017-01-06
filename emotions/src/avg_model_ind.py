@@ -76,9 +76,9 @@ folds = kf.split(data)
 ##############
 # Create output structure
 if args.ard:
-    mode = 'ard'
+    mode = 'ard50'
 else:
-    mode = 'iso'
+    mode = 'iso50'
 if args.bias:
     mode += '_bias'
 if args.norm:

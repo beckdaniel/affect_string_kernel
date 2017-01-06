@@ -75,11 +75,11 @@ folds = kf.split(data)
 
 ##############
 # Create output structure
-#if args.ard:
-#    mode = 'ard'
-#else:
-#    mode = 'iso'
-mode = 'iso'
+if args.ard:
+    mode = 'ard50'
+else:
+    mode = 'iso50'
+#mode = 'iso'
 if args.bias:
     mode += '_bias'
 main_out_dir = os.path.join(args.output_dir, 'avg', 'icm', args.model + '_' + mode, args.label_preproc)
@@ -277,3 +277,4 @@ for i_train, i_test in folds:
             
     # Finished emotions, next fold
     fold += 1
+
