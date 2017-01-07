@@ -9,9 +9,11 @@ MODELS = ['ridge', 'svr', 'rbf', 'mat32', 'mat52', 'ratquad', 'linear', 'mlp']
 #MODELS = ['rbf', 'mat32', 'mat52', 'ratquad', 'linear', 'mlp']
 #MODELS = ['mat32', 'mat52', 'ratquad', 'linear', 'mlp']
 #MODELS = ['ratquad', 'linear', 'mlp']
+MODELS = ['linear', 'rbf', 'mat32', 'mat52']
 #MODELS = ['ridge']
+#MODELS = ['svr']
 #MODELS = ['rbf']
-#MODELS = ['mat52']
+#MODELS = ['mat32']
 #MODELS = ['ridge', 'svr', 'rbf', 'mat32', 'mat52']
 RANKS = ['rank_1']
 #ARDS = ['iso', 'ard']
@@ -19,8 +21,8 @@ RANKS = ['rank_1']
 ARDS = ['iso']
 #SCALES = ['none', 'scale', 'warp']
 #SCALES = ['none', 'warp']
-BIAS = ['', '_bias']
-#BIAS = ['']
+#BIAS = ['', '_bias']
+BIAS = ['']
 #BIAS = ['_bias']
 #NORMS = ['', '_norm']
 NORMS = ['']
@@ -62,20 +64,26 @@ for model in MODELS:
                                 pearsons.append(info['pearsonr'][0])
                                 if 'nlpd' in info:
                                     nlpds.append(info['nlpd'])
-                            #print model, ard, scale, emo
-                            #print np.mean(maes), np.mean(rmses), np.mean(pearsons),
-                            emo_maes.append(np.mean(maes))
-                            emo_rmses.append(np.mean(rmses))
-                            emo_pearsons.append(np.mean(pearsons))
-                            if nlpds != []:
-                                #print np.mean(nlpds)
-                                emo_nlpd.append(np.mean(nlpds))
+                        print model, ard, scale, emo
+                        print "%.3f & %.3f & %.3f & %.3f" % (np.mean(nlpds), np.mean(maes), np.mean(pearsons), np.mean(rmses))
+                        #print np.median(maes), np.median(rmses), np.median(pearsons), np.median(nlpds)
+                        emo_maes.append(np.mean(maes))
+                        emo_rmses.append(np.mean(rmses))
+                        emo_pearsons.append(np.mean(pearsons))
+                        #emo_maes.append(np.median(maes))
+                        #emo_rmses.append(np.median(rmses))
+                        #emo_pearsons.append(np.median(pearsons))
+                        if nlpds != []:
+                            #print np.mean(nlpds)
+                            #emo_nlpd.append(np.median(nlpds))
+                            emo_nlpd.append(np.mean(nlpds))
                                 #else:
                                 #    print ''
                     print model, ard, scale, bias, norm
-                    print np.mean(emo_maes), np.mean(emo_rmses), np.mean(emo_pearsons),
-                    if emo_nlpd != []:
-                        print np.mean(emo_nlpd)
-                    else:
-                        print ''
+                    print "%.3f & %.3f & %.3f & %.3f" % (np.mean(emo_nlpd), np.mean(emo_maes), np.mean(emo_pearsons), np.mean(emo_rmses))
+                    #print np.mean(emo_maes), np.mean(emo_rmses), np.mean(emo_pearsons),
+                    #if emo_nlpd != []:
+                    #    print np.mean(emo_nlpd)
+                    #else:
+                    #    print ''
     
