@@ -5,7 +5,9 @@ import sys
 
 RESULTS_DIR = sys.argv[1]
 #MODELS = ['mat32_iso', 'mat52_iso', 'mat32_iso_bias', 'mat52_iso_bias']
+MODELS = ['mat32_iso', 'mat52_iso']
 MODELS = ['mat32_iso_bias', 'mat52_iso_bias']
+#MODELS = ['mat32_iso_bias', 'mat32_iso50_bias', 'mat32_ard50_bias']
 #MODELS = ['mat32_iso_bias']
 RANKS = ['rank_1', 'rank_2', 'rank_3', 'rank_4', 'rank_5']
 #RANKS = ['rank_1']
@@ -34,7 +36,9 @@ for model in MODELS:
                     rmses.append(info[emo]['rmse'])
                     pearsons.append(info[emo]['pearsonr'][0])
                     nlpds.append(info[emo]['nlpd'])
-                #print model, rank, emo                
+                print model, rank, emo               
+                print "%.3f & %.3f & %.3f & %.3f" % (np.mean(nlpds), np.mean(maes), np.mean(pearsons), np.mean(rmses))
+
                 #print np.mean(maes), np.mean(rmses), np.mean(pearsons), np.mean(nlpds)
                 #print np.median(maes), np.median(rmses), np.median(pearsons), np.median(nlpds)
                 emo_maes.append(np.mean(maes))
@@ -46,9 +50,11 @@ for model in MODELS:
                 #emo_pearsons.append(np.median(pearsons))
                 #emo_nlpd.append(np.median(nlpds))
             print model, rank, 'TOTAL'
-            print np.mean(emo_maes), np.mean(emo_rmses), np.mean(emo_pearsons),
-            if emo_nlpd != []:
-                print np.mean(emo_nlpd)
-            else:
-                print ''
+            print "%.3f & %.3f & %.3f & %.3f" % (np.mean(emo_nlpd), np.mean(emo_maes), np.mean(emo_pearsons), np.mean(emo_rmses))
+
+            #print np.mean(emo_maes), np.mean(emo_rmses), np.mean(emo_pearsons),
+            #if emo_nlpd != []:
+            #    print np.mean(emo_nlpd)
+            #else:
+            #    print ''
     
