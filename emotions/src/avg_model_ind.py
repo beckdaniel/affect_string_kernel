@@ -164,6 +164,8 @@ for i_train, i_test in folds:
             else:
                 #preds, vars = model.predict_noiseless(X_test)
                 preds, vars = model.predict(X_test)
+                print preds
+                print vars
             #if args.label_preproc == 'scale':
             #    preds = Y_scaler.inverse_transform(preds)
             #elif args.label_preproc == 'warp':

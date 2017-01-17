@@ -109,6 +109,7 @@ for i_train, i_test in folds:
         # Get predictions
         info_dict = {}
         preds, vars = model.predict(X_test)
+        print preds, vars
         info_dict['mae'] = MAE(preds, Y_test)
         info_dict['rmse'] = np.sqrt(MSE(preds, Y_test))
         info_dict['pearsonr'] = pearsonr(preds.flatten(), Y_test.flatten())
